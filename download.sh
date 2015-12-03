@@ -24,3 +24,8 @@ cd /tmp
 
 wget --no-check-certificate $REPOSITORY_URI && unzip master.zip -d /tmp && rm master.zip
 wget --no-check-certificate $COLORIZER_URI && unzip master.zip -d /tmp  && rm master.zip
+
+[[ ! -d /usr/bin/colorizer-master ]] && mv /tmp/colorizer-master /usr/bin/
+[[ ! -r /usr/bin/colorizer ]] && ln -s /usr/bin/colorizer-master/Library/colorizer.sh /usr/bin/colorizer
+
+bash /tmp/install-server-master/install.sh
