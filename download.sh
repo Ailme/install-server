@@ -23,4 +23,4 @@ REPOSITORY_URI="https://github.com/Ailme/install-server/archive/master.zip"
 cd /tmp
 
 wget --no-check-certificate $REPOSITORY_URI && unzip master.zip -d /tmp && rm master.zip
-wget --no-check-certificate $COLORIZER_URI | unzip master.zip -d /tmp  && rm master.zip
+wget --no-check-certificate $COLORIZER_URI && unzip master.zip -d /tmp  && rm master.zip
