@@ -3,8 +3,6 @@
 set -eu
 set -o pipefail
 
-export DEBIAN_FRONTEND=noninteractive
-
 if [[ "$UID" -ne "0" ]]; then
     echo 'You must be root'
     exit 1
