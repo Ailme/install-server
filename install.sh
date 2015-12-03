@@ -3,9 +3,20 @@
 set -eu
 set -o pipefail
 
-if [[ "$UID" -ne "0" ]];then
-	echo 'You must be root to install LXC Web Panel !'
-	exit
+export DEBIAN_FRONTEND=noninteractive
+
+if [[ "$UID" -ne "0" ]]; then
+	echo 'You must be root'
+	exit 1
 fi
 
-mkdir ~/.ssh
+TIMEZONE="Europe/Moscow"
+
+###
+
+cd /tmp
+
+[[ ! -d ~/.ssh ]] && mkdir ~/.ssh
+
+colorize "<green>Update timezone</green>"
+echo $TIMEZONE > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
