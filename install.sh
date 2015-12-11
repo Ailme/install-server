@@ -63,7 +63,7 @@ virsh net-info default
 sysctl -w net.ipv4.ip_forward=1
 
 
-cat ./ssh-keys/root.pub > /root/.ssh/authorized_keys
+cat /tmp/install-server-master/ssh-keys/root.pub > /root/.ssh/authorized_keys
 ssh-keygen -t dsa
 
 read -e -p "Scan known hosts? " -i "n" YES
@@ -77,9 +77,9 @@ chmod 700 /root/.ssh
 chmod 600 /root/.ssh/authorized_keys
 chmod 400 /root/.ssh/id_dsa
 
-cp -r ./config/ /root/
-cp -r ./lxc /root/config/
-cp ./lxc/default.conf /etc/lxc/
+cp -r /tmp/install-server-master/config/ /root/
+cp -r /tmp/install-server-master/lxc /root/config/
+cp /tmp/install-server-master/lxc/default.conf /etc/lxc/
 
 read -e -p "Add user? " -i "n" YES
 if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
@@ -89,9 +89,9 @@ if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
 	read -e -p "Add $NAME in sudo? " -i "n" YES
 	[[ "$YES" == "Y" || "$YES" == "y" ]] && usermod -G sudo "$NAME"
 
-	cp -r ./config/ /home/"$NAME"
+	cp -r /tmp/install-server-master/config/ /home/"$NAME"
 	mkdir /home/"$NAME"/.ssh
-	cat ./ssh-keys/ta.pub > /root/.ssh/authorized_keys
+	cat /tmp/install-server-master/ssh-keys/ta.pub > /root/.ssh/authorized_keys
 	cp /root/.ssh/known_hosts /home/"$NAME"/.ssh/
 
 	chmod 700 /home/"$NAME"/.ssh

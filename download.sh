@@ -60,4 +60,4 @@ echo "[$(date +%T)] remove archive"
 rm $REPO_ZIP
 
 echo "[$(date +%T)] run install script"
-bash /tmp/install-server-master/install.sh
+. /tmp/install-server-master/install.sh
