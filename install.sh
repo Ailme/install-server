@@ -8,15 +8,6 @@ if [[ "$UID" -ne "0" ]]; then
 	exit 1
 fi
 
-
-if [ -r /usr/bin/colorizer ]; then
-    . /usr/bin/colorizer
-else
-    colorize() {
-        echo $1
-    }
-fi
-
 ###
 
 cd /tmp
@@ -30,8 +21,8 @@ DEFAULT_PACKAGES="lsb-release aptitude vim supervisor tmux htop mc wget sudo ift
 [[ ! -d /root/bin ]] && mkdir /root/bin
 [[ ! -d /root/config ]] && mkdir /root/config
 
-colorize "<green>Update timezone</green>"
-read -e -p "Enter Timezone:" -i "Europe/Moscow" TIMEZONE
+echo "Update timezone"
+read -e -p "Enter Timezone: " -i "Europe/Moscow" TIMEZONE
 
 echo $TIMEZONE > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
 
@@ -43,7 +34,7 @@ if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
 	read -e -p "Upgrade kernel? " -i "n" YES
 	if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
 		apt-cache search -t jessie-backports linux-image
-		colorize -n "<yellow>Paste linux-image name:</yellow> "
+		echo -n "Paste linux-image name: "
 		read IMAGE
 
 		apt-cache search -t jessie-backports linux-headers
@@ -55,6 +46,8 @@ if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
 		update-grub2
 	fi
 fi
+
+apt-get update && apt-get -y upgrade
 
 read -e -p "Install default packages? " -i "Y" YES
 if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
@@ -92,7 +85,7 @@ read -e -p "Add user? " -i "n" YES
 if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
         read -e -p "username: " -i "" NAME
         adduser "$NAME"
-	
+
 	read -e -p "Add $NAME in sudo? " -i "n" YES
 	[[ "$YES" == "Y" || "$YES" == "y" ]] && usermod -G sudo "$NAME"
 
@@ -100,7 +93,7 @@ if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
 	mkdir /home/"$NAME"/.ssh
 	cat ./ssh-keys/ta.pub > /root/.ssh/authorized_keys
 	cp /root/.ssh/known_hosts /home/"$NAME"/.ssh/
-	
+
 	chmod 700 /home/"$NAME"/.ssh
 	chmod 600 /home/"$NAME"/.ssh/authorized_keys
 	chmod 400 /home/"$NAME"/.ssh/id_dsa
