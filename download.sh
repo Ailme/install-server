@@ -22,6 +22,16 @@ REPO_URI="https://github.com/Ailme/install-server/archive/master.zip"
 
 cd /tmp
 
+if [[ -d /tmp/colorizer-master ]]; then
+    read -e -p "folder /tmp/colorizer-master exist. Remove before download? " -i "Y" CMD
+    [[ "$CMD" -eq "Y" || "$CMD" -eq "y" ]] && rm -rf /tmp/colorizer-master
+fi
+
+if [[ -d /tmp/install-server-master ]]; then
+    read -e -p "folder /tmp/colorizer-master exist. Remove before download? " -i "Y" CMD
+    [[ "$CMD" -eq "Y" || "$CMD" -eq "y" ]] && rm -rf /tmp/install-server-master
+fi
+
 echo "[$(date +%T)] download colorizer"
 wget --no-check-certificate -O $COLORIZER_ZIP $COLORIZER_URI
 
