@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set -eu
-set -o pipefail
+#set -eu
+#set -o pipefail
 
 if [[ "$UID" -ne "0" ]]; then
     echo 'You must be root'
@@ -24,12 +24,12 @@ cd /tmp
 
 if [[ -d /tmp/colorizer-master ]]; then
     read -e -p "folder /tmp/colorizer-master exist. Remove before download? " -i "Y" CMD
-    [[ "$CMD" -eq "Y" || "$CMD" -eq "y" ]] && rm -rf /tmp/colorizer-master
+    [[ "$CMD" == "Y" || "$CMD" == "y" ]] && rm -rf /tmp/colorizer-master
 fi
 
 if [[ -d /tmp/install-server-master ]]; then
     read -e -p "folder /tmp/colorizer-master exist. Remove before download? " -i "Y" CMD
-    [[ "$CMD" -eq "Y" || "$CMD" -eq "y" ]] && rm -rf /tmp/install-server-master
+    [[ "$CMD" == "Y" || "$CMD" == "y" ]] && rm -rf /tmp/install-server-master
 fi
 
 echo "[$(date +%T)] download colorizer"
