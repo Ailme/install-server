@@ -38,7 +38,7 @@ if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
 		read IMAGE
 
 		apt-cache search -t jessie-backports linux-headers
-		colorize -n "<yellow>Paste linux-headers name:</yellow> "
+		echo -n "Paste linux-headers name: "
 		read HEADERS
 
 		apt-get install -t jessie-backports "$IMAGE" "$HEADERS"
