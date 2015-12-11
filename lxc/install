@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cp -r /config/home/. ~/
+
+apt-get update
+
+apt-get install -y vim lsb-release rsync cron inetutils-ping htop mc wget ntp man less telnet sysstat lsof time lynx curl snmp git unzip bash-completion nano easy-rsa
+
+echo "Europe/Moscow" > /etc/timezone
+dpkg-reconfigure -f noninteractive tzdata
+
+cd /usr/share/easy-rsa/
+source ./vars
+./clean-all
+yes "" | ./build-ca
+
+cd -

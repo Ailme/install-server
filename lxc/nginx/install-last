@@ -1,0 +1,21 @@
+#!/bin/bash
+
+wget http://nginx.org/keys/nginx_signing.key
+apt-key add nginx_signing.key
+rm nginx_signing.key
+
+echo "deb http://nginx.org/packages/mainline/debian/ "$(lsb_release -sc)" nginx" | tee /etc/apt/sources.list.d/nginx.list
+
+apt-get update
+
+apt-get install -y nginx
+
+cp -r /config/nginx/include /etc/nginx/
+
+cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf_old
+
+[[ -d /etc/nginx/sites-available ]] && rm -rf /etc/nginx/sites-available
+[[ -d /etc/nginx/sites-enabled ]] && rm -rf /etc/nginx/sites-enabled
+[[ -d /etc/nginx/conf.d ]] && rm -rf /etc/nginx/conf.d && mkdir -p /etc/nginx/conf.d
+
+cp /config/nginx/nginx.conf /etc/nginx/nginx.conf

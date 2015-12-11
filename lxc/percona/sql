@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -eu
+
+export DEBIAN_FRONTEND=noninteractive
+PASSWORD=123456
+
+# Delete anonymous users and test table
+mysql -uroot -p$PASSWORD -e "DELETE FROM mysql.user WHERE User = '';
+DROP DATABASE test;
+DELETE FROM mysql.user WHERE user='root' AND host<>'127.0.0.1';
+UPDATE mysql.user SET password=PASSWORD('$PASSWORD'), host='%' WHERE user='root';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+CREATE DATABASE IF NOT EXISTS service;
+GRANT ALL ON service.* to 'user'@'%' IDENTIFIED BY '$PASSWORD';
+FLUSH PRIVILEGES;"

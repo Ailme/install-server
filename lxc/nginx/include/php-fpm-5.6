@@ -1,0 +1,100 @@
+index       index.html index.htm index.php;
+charset     UTF-8;
+access_log  off;
+    
+# Global restrictions configuration file.
+# Designed to be included in any server {} block.</p>
+location = /favicon.ico {
+	log_not_found off;
+	access_log off;
+}
+
+location = /robots.txt {
+	allow all;
+	log_not_found off;
+	access_log off;
+}
+
+# Ограничение доступа к разным файлам и папкам которые часто используются для хранения важной информации
+#location ~* "/(engine|inc|data|conf|config|bin|info|install|module|profile|theme)((/.*)?)$"
+#{
+#	deny all;
+#	return 404;
+#}
+
+# Запрет доступа к .htaccess и .htpasswd файлам
+location ~* "/\.ht"
+{
+	deny all;		# запретить все для всех
+	return 404;		# вернуть код ошибки
+}
+
+# Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
+# Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban)
+location ~ /\. {
+	deny all;
+}
+
+# Deny access to any files with a .php extension in the uploads directory
+# Works in sub-directory installs and also in multisite network
+# Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban)
+#location ~* /(?:uploads|files)/.*\.php$ {
+#	deny all;
+#}
+
+location ~ /\.svn/* {
+    deny all;
+}
+
+location ~ /\.git/* {
+    deny all;
+}
+
+location /nginx_status {
+    stub_status on;
+    access_log off;
+}
+
+# Directives to send expires headers and turn off 404 error logging.
+location ~* ^.+\.(ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|rss|atom|jpg|jpeg|gif|png|ico|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$ {
+       access_log off;
+       log_not_found off;
+       expires max;
+}
+
+location / {
+	try_files $uri $uri/ /index.php?$args;
+}
+
+# Add trailing slash to */wp-admin requests.
+rewrite /wp-admin$ $scheme://$host$uri/ permanent;
+
+# Uncomment one of the lines below for the appropriate caching plugin (if used).
+#include global/wordpress-wp-super-cache.conf;
+#include global/wordpress-w3-total-cache.conf;
+
+location ~ \.php$ {
+	# fastcgi_pass   0.0.0.0:9001;
+	fastcgi_pass unix:/var/run/php5-fpm.sock;
+
+	# Настройки порта или сокета PHP-FPM производятся в файле "/etc/php5/fpm/pool.d/www.conf"
+
+	# Порядок важен - строчка "include fastcgi_params" должна быть первой
+	include fastcgi_params;
+	fastcgi_read_timeout 600;
+
+	fastcgi_split_path_info	^(.+?\.php)(/.*)?$;
+
+	# Вместо переменной "$document_root" можно указать адрес к корневому каталогу сервера и это желательно (см. http://wiki.nginx.org/Pitfalls)
+	fastcgi_param	SCRIPT_FILENAME		$document_root$fastcgi_script_name;
+	fastcgi_param	PATH_TRANSLATED		$document_root$fastcgi_script_name;
+
+	# См. http://trac.nginx.org/nginx/ticket/321
+	set		$path_info		$fastcgi_path_info;
+	fastcgi_param	PATH_INFO		$path_info;
+
+	# Указание дополнительных переменных окружения PHP
+	fastcgi_param	SERVER_ADMIN		info@205k.in;
+	fastcgi_param	SERVER_SIGNATURE	nginx/$nginx_version;
+	fastcgi_index	index.php;
+}

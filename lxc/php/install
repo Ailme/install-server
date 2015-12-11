@@ -1,0 +1,24 @@
+#!/bin/bash
+
+apt-get update
+
+apt-get install -y php5 php5-geoip php5-imagick php5-json php5-memcache php5-mongo php5-cli php5-common php5-curl php5-enchant php5-fpm php5-gd php5-gmp php5-imap php5-mysqlnd php5-intl php5-mcrypt php5-pgsql php5-pspell php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-xdebug php5-readline php5-ssh2
+
+
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+CMD="0    10       1       *       *       root    composer selfupdate" cat <(crontab -l) <(echo "$CMD") | crontab
+
+sed  -ri "s/^max_execution_time = 30/max_execution_time = 0/" /etc/php5/cli/php.ini
+sed  -ri "s/^max_input_time = 60/max_input_time = 0/" /etc/php5/cli/php.ini
+sed  -ri "s/^post_max_size = 8M/post_max_size = 800M/" /etc/php5/cli/php.ini
+sed  -ri "s/^upload_max_filesize = 2M/upload_max_filesize = 800M/" /etc/php5/cli/php.ini
+sed  -ri "s/^;date.timezone =/date.timezone =Europe\/Moscow/" /etc/php5/cli/php.ini
+
+sed  -ri "s/^max_execution_time = 30/max_execution_time = 0/" /etc/php5/fpm/php.ini
+sed  -ri "s/^max_input_time = 60/max_input_time = 0/" /etc/php5/fpm/php.ini
+sed  -ri "s/^post_max_size = 8M/post_max_size = 800M/" /etc/php5/fpm/php.ini
+sed  -ri "s/^upload_max_filesize = 2M/upload_max_filesize = 800M/" /etc/php5/fpm/php.ini
+sed  -ri "s/^;date.timezone =/date.timezone =Europe\/Moscow/" /etc/php5/fpm/php.ini
+sed  -ri "s/^memory_limit = 128M/memory_limit = 1000M/" /etc/php5/fpm/php.ini
+
