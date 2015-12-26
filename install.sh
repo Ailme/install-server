@@ -41,7 +41,7 @@ if [[ "$REPLY" == "Y" || "$REPLY" == "y" ]]; then
 		read -e -p "Enter linux-image name: " IMAGE
 
 		apt-cache search -t "$CODENAME"-backports linux-headers
-		echo -e -p "Enter linux-headers name: " HEADERS
+		read -e -p "Enter linux-headers name: " HEADERS
 
 		apt-get install -t "$CODENAME"-backports "$IMAGE $HEADERS"
 
