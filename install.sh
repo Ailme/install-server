@@ -30,12 +30,12 @@ read -e -p "Enter Timezone: " -i "Europe/Moscow" TIMEZONE
 
 echo $TIMEZONE > /etc/timezone && dpkg-reconfigure -f tzdata
 
-read -e -p "Add $CODENAME backports repository? " -i "Y" YES
+read -e -p "Add $CODENAME backports repository? [Y|n] " -i "Y" YES
 if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
 	echo "deb http://http.debian.net/debian $CODENAME-backports main" >  /etc/apt/sources.list.d/backports.list
 	apt-get update
 
-	read -e -p "Upgrade kernel? " -i "n" YES
+	read -e -p "Upgrade kernel? [Y|n] " -i "n" YES
 	if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
 		apt-cache search -t "$CODENAME"-backports linux-image
 		read -e -p "Select linux-image name: " IMAGE
@@ -51,7 +51,7 @@ fi
 
 apt-get update && apt-get -y upgrade
 
-read -e -p "Install default packages? " -i "Y" YES
+read -e -p "Install default packages? [Y|n] " -i "Y" YES
 if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
 	read -e -p "The following packages will be installed: " -i $DEFAULT_PACKAGES PACKAGES
 	apt-get install -y "$PACKAGES"
@@ -68,7 +68,7 @@ sysctl -w net.ipv4.ip_forward=1
 cat /tmp/install-server-master/ssh-keys/root.pub > /root/.ssh/authorized_keys
 ssh-keygen -t dsa
 
-read -e -p "Scan known hosts? " -i "n" YES
+read -e -p "Scan known hosts? [Y|n] " -i "n" YES
 if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
         read -e -p "hosts for scan: " -i "" HOSTS
         ssh-keyscan "$HOSTS" >> /root/.ssh/known_hosts
@@ -83,12 +83,12 @@ cp -r /tmp/install-server-master/config/ /root/
 cp -r /tmp/install-server-master/lxc /root/config/
 cp /tmp/install-server-master/lxc/default.conf /etc/lxc/
 
-read -e -p "Add user? " -i "n" YES
+read -e -p "Add user? [Y|n] " -i "n" YES
 if [[ "$YES" == "Y" || "$YES" == "y" ]]; then
         read -e -p "username: " -i "" NAME
         adduser "$NAME"
 
-	read -e -p "Add $NAME in sudo? " -i "n" YES
+	read -e -p "Add $NAME in sudo? [Y|n] " -i "n" YES
 	[[ "$YES" == "Y" || "$YES" == "y" ]] && usermod -G sudo "$NAME"
 
 	cp -r /tmp/install-server-master/config/ /home/"$NAME"
